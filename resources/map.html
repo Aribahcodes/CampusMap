@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>VIT Campus Map</title>
+  <style>
+    html, body, #map {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+    #searchBox {
+      position: absolute;
+      top: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 400px;
+      z-index: 5;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 6px;
+      border: none;
+      font-size: 14px;
+      outline: none;
+    }
+  </style>
+</head>
+<body>
+
+<input id="searchBox" type="text" placeholder="Search building, hostel, food court, etc...">
+
+<div id="map"></div>
+
+<script>
+  let map;
+  function initMap() {
+    // VIT Vellore center
+    const vit = { lat: 12.9692, lng: 79.1559 };
+
+    map = new google.maps.Map(document.getElementById("map"), {
+      center: vit,
+      zoom: 16.5,
+      styles: [ { "elementType": "geometry", "stylers": [ { "color": "#212121" } ] },
+                { "elementType": "labels.icon", "stylers": [ { "visibility": "off" } ] },
+                { "elementType": "labels.text.fill", "stylers": [ { "color": "#ffffff" } ] },
+                { "elementType": "labels.text.stroke", "stylers": [ { "color": "#000000" } ] },
+                { "featureType": "poi", "stylers": [ { "visibility": "on" } ] } ],
+      mapTypeControl: false
+    });
+
+    // Search Autocomplete
+    const input = document.getElementById("searchBox");
+    const searchBox = new google.maps.places.SearchBox(input);
+    map.addListener("bounds_changed", () => {
+      searchBox.setBounds(map.getBounds());
+    });
+
+    let markers = [];
+
+    searchBox.addListener("places_changed", () => {
+      const places = searchBox.getPlaces();
+      if (places.length == 0) return;
+
+      markers.forEach(m => m.setMap(null));
+      markers = [];
+
+      const bounds = new google.maps.LatLngBounds();
+      places.forEach(place => {
+        if (!place.geometry || !place.geometry.location) return;
+
+        markers.push(new google.maps.Marker({
+          map,
+          title: place.name,
+          position: place.geometry.location
+        }));
+        bounds.extend(place.geometry.location);
+      });
+      map.fitBounds(bounds);
+      map.setZoom(18);
+    });
+  }
+</script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCDaRG1FjdjtvLaBcVe84L2ry13_4Kq9Fo&libraries=places&callback=initMap" async defer></script>
+
+</body>
+</html>
