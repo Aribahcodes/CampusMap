@@ -39,16 +39,19 @@
     // VIT Vellore center
     const vit = { lat: 12.9692, lng: 79.1559 };
 
-    map = new google.maps.Map(document.getElementById("map"), {
-      center: vit,
-      zoom: 16.5,
-      styles: [ { "elementType": "geometry", "stylers": [ { "color": "#212121" } ] },
-                { "elementType": "labels.icon", "stylers": [ { "visibility": "off" } ] },
-                { "elementType": "labels.text.fill", "stylers": [ { "color": "#ffffff" } ] },
-                { "elementType": "labels.text.stroke", "stylers": [ { "color": "#000000" } ] },
-                { "featureType": "poi", "stylers": [ { "visibility": "on" } ] } ],
-      mapTypeControl: false
-    });
+	map = new google.maps.Map(document.getElementById("map"), {
+	  center: vit,
+	  zoom: 17,
+	  mapTypeId: google.maps.MapTypeId.ROADMAP, 
+	  styles: [
+	    { "elementType": "geometry", "stylers": [ { "color": "#1d1d1d" } ] },
+	    { "elementType": "labels.text.fill", "stylers": [ { "color": "#ffffff" } ] },
+	    { "elementType": "labels.text.stroke", "stylers": [ { "color": "#000000" } ] },
+	    { "featureType": "poi", "stylers": [ { "visibility": "on" } ] }
+	  ],
+	  mapTypeControl: false
+	});
+
 
     // Search Autocomplete
     const input = document.getElementById("searchBox");
@@ -83,7 +86,7 @@
   }
 </script>
 
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCDaRG1FjdjtvLaBcVe84L2ry13_4Kq9Fo&libraries=places&callback=initMap" async defer></script>
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyCDMdfWnUJdAeL0h-DEidIHk3kpJ0EoeqM&libraries=places&callback=initMap"></script>
 
 </body>
 </html>
