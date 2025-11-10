@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <title>VIT Campus Map</title>
+
+    <style>
+        body { margin: 0; }
+        #map { width: 100vw; height: 100vh; }
+        #controls {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 5;
+            background: white;
+            padding: 10px;
+            border-radius: 6px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.3);
+        }
+        select, button { padding: 6px; margin: 5px; }
+    </style>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=__API_KEY__&libraries=places"></script>
+</head>
+<body>
+
+<div id="controls">
+    <select id="start">
+        <option value="">Select Start</option>
+        <option value="12.971891,79.159313">Main Gate</option>
+        <option value="12.972903,79.163218">Food Court</option>
+        <option value="12.973845,79.159812">SMV</option>
+        <option value="12.973150,79.163950">Technology Tower</option>
+    </select>
+
+    <select id="end">
+        <option value="">Select Destination</option>
+        <option value="12.971891,79.159313">Main Gate</option>
+        <option value="12.972903,79.163218">Food Court</option>
+        <option value="12.973845,79.159812">SMV</option>
+        <option value="12.973150,79.163950">Technology Tower</option>
+    </select>
+
+    <button onclick="calcRoute()">Show Route</button>
+</div>
+
+<div id="map"></div>
+
+<script>
+    let map, directionsService, directionsRenderer;
+
+    function initMap() {
+        const vit = { lat: 12.972218, lng: 79.159094 }; // VIT campus center
+
+        map = new google.maps.Map(document.getElementById("map"), {
+            zoom: 16,
+            center: vit
+        });
+
+        directionsService = new google.maps.DirectionsService();
+        directionsRenderer = new google.maps.DirectionsRenderer();
+        directionsRenderer.setMap(map);
+    }
+
+    function calcRoute() {
+        let start = document.getElementById("start").value;
+        let end = document.getElementById("end").value;
+
+        if (!start || !end) return;
+
+        const request = {
+            origin: start,
+            destination: end,
+            travelMode: "WALKING"
+        };
+
+        directionsService.route(request, function(result, status) {
+            if (status === "OK") directionsRenderer.setDirections(result);
+        });
+    }
+
+    window.onload = initMap;
+</script>
+
+</body>
+</html>
